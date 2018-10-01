@@ -4,7 +4,7 @@ import struct
 import array
 from fcntl import ioctl
 import threading
-import RTCEventMaster
+import RTCEventMaster as RTCEventMaster
 
 
 class JoyCrashError(Exception):  # Исключение поломки джойстика

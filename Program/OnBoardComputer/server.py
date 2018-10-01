@@ -12,7 +12,7 @@ selfIP = subprocess.check_output(cmd, shell=True)     # получаем IP
 selfIP.rstrip().decode("utf-8")     # удаляем \n, переводим в текст
 
 
-server = SimpleXMLRPCServer((selfIP, RPCServerPort))
+server = SimpleXMLRPCServer((selfIP, RPCServerPort), logRequests=False)
 
 server.register_function(rotate)
 server.register_function(turnForward)

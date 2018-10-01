@@ -1,7 +1,7 @@
 """ Конфигурация робота """
 # from RPiPWM import *
 
-from OnBoardComputer.RPiPWM import *
+from RPiPWM import *
 
 """
     F   - Front

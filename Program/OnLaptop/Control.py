@@ -1,5 +1,5 @@
 """ Модуль описывающий управление роботом """
-import Robot
+import Robot as Robot
 import threading
 import time
 from config import *
@@ -21,20 +21,19 @@ class Control (threading.Thread):
             try:
                 # если клиент и джойстик созданы и нет разворота на месте
                 if self.robot.online and (self._joystick is not None):
-                    if self._joystick.Buttons.get(TURN_CLOCKWISE_BUTTON) == 0 and \
-                            self._joystick.Buttons.get(TURN_COUNTERCLOCKWISE_BUTTON) == 0:
-
+                    if self._joystick.Axis.get(ROTATE_STICK) * 100 == 0
                         self.robot.turnForward(self._joystick.Axis.get(
                             TURN_FORWARD_STICK))  # поворот передней части робота
 
-                        if self._joystick.Buttons.get(FORWARD_BUTTON) == 0 and \
-                                self._joystick.Buttons.get(BACK_BUTTON) == 0:  # если нет движения вперед/назад
-
+                            self.robot.move(self._joystick.Axis.get(
+                                MOVE_STICK_CROSS))  # движение вперед/назад по стику-кресту
                             self.robot.move(self._joystick.Axis.get(MOVE_STICK))  # движение вперед/назад по стику
                         self.robot.rotateBase(
                             self._joystick.Axis.get(TURN_BASE_STICK))  # поворот основания манипулятора
                         self.robot.rotateCrank(
                             self._joystick.Axis.get(TURN_CRANK_STICK))  # поворот кривошипа манипулятора
+                    else
+                        self.robot.rotate(ROTATE_STICK)
             except:
                 pass
             time.sleep(SEND_DELAY)
@@ -46,11 +45,8 @@ class Control (threading.Thread):
         def subSpeed():
             self.robot.motorSpeed -= SPEED_CHANGE_STEP  # уменьшаем скорость
 
-        def turnClockWise():
+        def rotate():
             self.robot.rotate(self.robot.motorSpeed)
-
-        def turnCounterClockWise():
-            self.robot.rotate(-self.robot.motorSpeed)
 
         def move(direction):
             self.robot.move(direction)
@@ -70,16 +66,8 @@ class Control (threading.Thread):
 
         self._joystick.connectButton(ADD_SPEED_BUTTON, addSpeed)
         self._joystick.connectButton(SUB_SPEED_BUTTON, subSpeed)
-        self._joystick.connectButton(TURN_CLOCKWISE_BUTTON,
-                                     turnClockWise())  # поворот на месте по часовой стрелке
-        self._joystick.connectButton(TURN_COUNTERCLOCKWISE_BUTTON,
-                                     turnCounterClockWise())  # поворот на месте против часовой стрелки
-        self._joystick.connectButton(TURN_CLOCKWISE_BUTTON,
-                                     turnClockWise())  # поворот на месте по часовой стрелке
-        self._joystick.connectButton(FORWARD_BUTTON,
-                                     move(MOVING_FORWARD))  # движение вперед
-        self._joystick.connectButton(BACK_BUTTON,
-                                     move(MOVING_BACK))  # движение назад
+        # TODO: Добавить функция для включения автономки
+        self._joystick.connectButton(SET_AUTO_BUTTON, setAutoButton())
 
         """Привязка кнопок по управлению манипулятором"""
         self._joystick.connectButton(SET_MANIPULATOR_BUTTON, defaultPosition())
@@ -87,6 +75,7 @@ class Control (threading.Thread):
         self._joystick.connectButton(ROD_DOWN_BUTTON, rotateRod(TURN_DOWN_ROD))
         self._joystick.connectButton(TONG_GRASP_BUTTON, rotateGrasp(TONG_GRASP))
         self._joystick.connectButton(UNCLASP_GRASP_BUTTON, rotateGrasp(UNCLASP_GRASP))
+
 
     def exit(self):
         self._EXIT = True
