@@ -19,11 +19,13 @@ class Robot:  # класс, переносящий ф-ии с робота на 
         self._client = None
         self._motorSpeed = 0    # скорость, которую мы подаем на моторы
 
-        self._stepAngleSrv = 10
+        self._camAngle = 0  # угол поворота сервы камеры
+        self._stepAngleSrv = 10 # шаг изменения угла серв основания и кривошипа манипулятора
         self._baseAngle = 0     # углы поворота звеньев маипулятора
         self._crankAngle = 0
         self._rodAngle = 0
         self._graspAngle = 0
+        self._movingReverse = -1
 
     def connect(self, ip, port):
         self._ip = ip
@@ -31,22 +33,20 @@ class Robot:  # класс, переносящий ф-ии с робота на 
         self._proxy = "http://" + ip + ':' + port
         self._client = xmlrpc.client.ServerProxy(self._proxy)
 
-    def rotate(self, scale):  # scale - состояние кнопки поворота: нажата(1), не нажата(0)
-        # поворачиваемся со скоростью моторов
-        # MotorSpeed * scale
-        self._client.rotate(scale * self._motorSpeed)
+    def rotate(self, scale):  # scale - значение из диапазона (-1, 1) # поворачиваемся со скоростью
+        # MotorSpeed*коэффициент scale
+        self._client.rotate(int(scale * self._motorSpeed))
 
     def turnForward(self, scale):  # scale - значение из диапазона (-1, 1)
         # поворачиваем сервы передней части робота в зависимости от значения со стика
         self._client.turnForward(scale)
 
-    def turnBackside(self, scale):  # scale - значение из диапазона (-1, 1)
-        # 	 поворачиваем сервы задней части робота в зависимости от значения со стика
-        self._client.turnBackside(scale)
-
     def move(self, scale):  # scale - значение из диапазона (-1, 1) # движемся вперед со скоростью
-        # MotorSpeed*коэффициент scale
-        self._client.move(int(scale * self._motorSpeed))
+        # MotorSpeed*коэффициент scale * (-1) - для реверса стика
+        self._client.move(int(scale * self._motorSpeed) * self._movingReverse)
+
+    def turnCam(self):
+        self._client.turnCam(self._camAngle)    # self._camAngle - угол из диапазона (-90, 90)
 
     @property
     def online(self):  # создан ли клиент
@@ -55,6 +55,10 @@ class Robot:  # класс, переносящий ф-ии с робота на 
     @property
     def motorSpeed(self):
         return self._motorSpeed
+
+    @property
+    def camAngle(self):
+        return self._camAngle
 
     @motorSpeed.setter
     def motorSpeed(self, value):  # устанавливаем максимально возможную скорость движения,
@@ -65,6 +69,16 @@ class Robot:  # класс, переносящий ф-ии с робота на 
             self._motorSpeed = -100
         else:
             self._motorSpeed = value
+
+    @camAngle.setter
+    def camAngle(self, value):
+        if value >= 90:
+            self._camAngle = 90
+        elif value <= -90:
+            self._camAngle = -90
+        else:
+            self._camAngle = value
+
 
     """ управление манипулятором"""
     def defaultPosition(self):

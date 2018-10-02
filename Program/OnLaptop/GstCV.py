@@ -244,4 +244,3 @@ class CVGstreamer:
             self.toAVS = True
             self.stop()
             self.start()
-

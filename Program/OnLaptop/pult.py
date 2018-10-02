@@ -4,7 +4,7 @@ from RTCJoystick import Joystick
 from Control import Control
 from config import *
 import time
-import GstCV as GstCV
+import GstCV
 
 joystick = Joystick()
 joystick.connect("/dev/input/js0")

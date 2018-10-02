@@ -2,22 +2,18 @@ IP = "173.1.0.22"  # TODO: поменять айпишник на айпишни
 PORT = 8000
 
 SEND_DELAY = 0.05  # время задержки отправки новых данных
-# TURN_STICK = 'z'  # имя поворотного стика(передняя часть робота)
-# ROTATE_STICK = 'y'  # имя стика разворота на месте
-# MOVE_STICK = 'rz'  # имя стика движения робота
-# SPEED_CHANGE_STEP = 10  # размер шага изменения максимальной, при прибавлении или уменьшении с кнопки
-# ADD_SPEED_BUTTON = 'pinkie'  # имя кнопки прибавления скорости
-# SUB_SPEED_BUTTON = 'top2'  # имя кнопки уменьшениия шага
-# SET_AUTO_BUTTON = 'base2'    # имя кнопки установки автономки
 
-MOVING_FORWARD = 1
-MOVING_BACK = -1
+ROD_UP = 1
+ROD_DOWN = -1
 
-TURN_UP_ROD = 1
-TURN_DOWN_ROD = -1
+CAM_UP = 1
+CAM_DOWN = -1
 
 TONG_GRASP = 1
 UNCLASP_GRASP = -1
+
+CAM_UP_BUTTON = 'select'    #   повернуть камеру вверх
+CAM_DOWN_BUTTON = 'mode'    #   повернуть камеру вниз
 
 ROTATE_STICK = 'hat0x'  # имя стика поворота робота на месте (горизонтальная ось креста)
 TURN_FORWARD_STICK = 'x'  # имя поворотного стика (левый стик горизонтальная ось) (передняя часть робота)

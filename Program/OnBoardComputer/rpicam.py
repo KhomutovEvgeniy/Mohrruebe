@@ -45,7 +45,7 @@ class AppSrcStreamer(object):
         self._height = resolution[1]
         self._scaleWidth = int(self._width*scale)
         self._scaleHeight = int(self._height*scale)        
-        self._needFrame = threading.Event() #флаг, необходимо сформировать OpenCV кадр
+        self._needFrame = threading.Event() # флаг, необходимо сформировать OpenCV кадр
         self.playing = False
         self.paused = False
         self._onFrameCallback = None

@@ -8,10 +8,11 @@ import psutil
 import threading
 import rpicam
 from config import *
+import rpicam
 
 # настройки видеопотока
-#FORMAT = rpicam.FORMAT_H264  # поток H264
-FORMAT = rpicam.FORMAT_MJPEG #поток MJPEG
+# FORMAT = rpicam.FORMAT_H264  # поток H264
+FORMAT = rpicam.FORMAT_MJPEG    # поток MJPEG
 WIDTH, HEIGHT = 640, 360
 RESOLUTION = (WIDTH, HEIGHT)
 FRAMERATE = 30
@@ -40,7 +41,7 @@ class FrameHandlerThread(threading.Thread):
                 time.sleep(2)  # имитируем обработку кадра
                 imgFleName = 'frame%d.jpg' % self._frameCount
                 # cv2.imwrite(imgFleName, self._frame) #сохраняем полученный кадр в файл
-                #print('Write image file: %s' % imgFleName)
+                # print('Write image file: %s' % imgFleName)
                 self._frameCount += 1
                 # --------------------------------------
 
@@ -81,5 +82,3 @@ frameHandlerThread = FrameHandlerThread(rpiCamStreamer)
 def start():
     rpiCamStreamer.start()  # запускаем трансляцию
     frameHandlerThread.start()  # запускаем обработку
-
-
